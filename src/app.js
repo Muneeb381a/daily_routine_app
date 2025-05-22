@@ -1,11 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import { pool } from "./config/db.js";
 
 dotenv.config()
 
 
-const app = express()
+const app = express();
+
+pool.connect()
 
 app.use(cors());
 
