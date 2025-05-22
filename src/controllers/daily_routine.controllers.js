@@ -60,5 +60,30 @@ const updateDailyRoutine = async(req, res) => {
     }
 }
 
+const deleteDailyRoutine = async (req, res) => {
+    const { id } = req.params;
 
-export {getDailyRoutine, createDailyRoutine, updateDailyRoutine};
+    try {
+        const result = await pool.query(
+            'DELETE FROM daily_routine WHERE id = $1 RETURNING *',
+            [id]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "There is no daily routine to delete" });
+        }
+
+        res.status(200).json({
+            status: 200,
+            message: "Daily routine deleted successfully",
+            data: result.rows[0]
+        });
+    } catch (error) {
+        console.error("Error while deleting the daily routine:", error);
+        res.status(500).json({ message: "Unable to delete daily routine" });
+    }
+};
+
+
+
+export {getDailyRoutine, createDailyRoutine, updateDailyRoutine, deleteDailyRoutine};
