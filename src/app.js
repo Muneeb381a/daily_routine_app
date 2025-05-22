@@ -8,9 +8,13 @@ dotenv.config()
 
 const app = express();
 
-pool.connect()
+pool.connect();
+
+
 
 app.use(cors());
+
+app.use(express.json());
 
 app.get("/", (req, res) => {
     res.json({
@@ -18,6 +22,13 @@ app.get("/", (req, res) => {
         message: "Application is working good"
     })
 })
+
+
+
+
+import routine from "./routes/daily_routine.routes.js";
+
+app.use("/v1/api/routine", routine)
 
 
 export default app
