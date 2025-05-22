@@ -12,5 +12,29 @@ const getDailyRoutine =async (req, res) => {
     }
 }
 
+const createDailyRoutine = async(req, res) => {
+    const {title} = req.body;
 
-export {getDailyRoutine};
+    if(!title) {
+        res.status(500).json({message: "Title field is required"})
+    }
+
+    try {
+        const result = await pool.query(
+            'INSERT INTO daily_routine (title) VALUES ($1) RETURNING *',
+            [title]
+        )
+
+        res.status(201).json({
+            status: 201,
+            message: "Daily Routine Created Succesfully",
+            data: result.rows[0]
+        })
+    } catch (error) {
+        console.error("Error inserting title")
+        throw new Error("Unable to create daily routine")
+    }
+}
+
+
+export {getDailyRoutine, createDailyRoutine};
