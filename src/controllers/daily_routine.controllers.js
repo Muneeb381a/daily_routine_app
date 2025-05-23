@@ -13,16 +13,16 @@ const getDailyRoutine =async (req, res) => {
 }
 
 const createDailyRoutine = async(req, res) => {
-    const {title} = req.body;
+    const {title, name} = req.body;
 
-    if(!title) {
+    if(!title || !name) {
         res.status(500).json({message: "Title field is required"})
     }
 
     try {
         const result = await pool.query(
-            'INSERT INTO daily_routine (title) VALUES ($1) RETURNING *',
-            [title]
+            'INSERT INTO daily_routine (title, name) VALUES ($1, $2) RETURNING *',
+            [title, name]
         )
 
         res.status(201).json({
