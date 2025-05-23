@@ -30,4 +30,28 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
+// handle pool error
+
+pool.on("error", (err, client) => {
+  console.error("Database Pool Error", err.stack);
+});
+
+// Test connection on startup
+
+pool
+  .connect()
+  .then(async (client) => {
+    console.log("Connected with LocalDatabase");
+    return client
+      .query("SELECT NOW()")
+      .then(() => client.release)
+      .catch((err) => {
+        console.error("Connection test query Failed", err.stack);
+        client.release();
+      });
+  })
+  .catch((err) =>
+    console.error("Error while connecting with local Database", err.stack)
+  );
+
 export { pool };
