@@ -21,3 +21,35 @@ export const getAllRoutines = async (req, res) => {
     });
   }
 };
+
+
+export const createNewRoutine = async(req, res) => {
+    const {title, description, date} = req.body
+
+
+    if(!title || !description || !date) {
+        return res.status(400).json({
+            success: false,
+            message: "All fields are required"
+        })
+    }
+
+    try {
+        const {rows} = await pool.query('INSERT INTO routine(title, description, date) VALUES($1, $2, $3) RETURNING *',
+            [title, description, date]
+        )
+        res.status(201).json({
+            success: true,
+            message: "Routine Created Succesfully",
+            data: rows[0],
+            date: new Date().toISOString()
+        })
+    } catch (err) {
+        console.error("Error while creating the routine", err);
+        res.status(400).json({
+            success: false,
+            message: "Error While creating routine",
+            date: new Date().toISOString()
+        })
+    }
+}
