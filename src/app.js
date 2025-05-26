@@ -27,8 +27,10 @@ app.get("/", (req, res) => {
 
 
 import routine from "./routes/daily_routine.routes.js";
+import allRoutine from "./routes/routine.routes.js"
 
 app.use("/v1/api/routine", routine)
+app.use("/v1/api/all-routines", allRoutine)
 
 
 export default app
