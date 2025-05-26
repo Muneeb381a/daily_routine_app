@@ -9,7 +9,7 @@ export const getAllRoutines = async (req, res) => {
       success: true,
       message: "All routines fetched succesfully",
       count: rows.length,
-      date: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
       data: rows,
     });
   } catch (err) {
@@ -17,7 +17,7 @@ export const getAllRoutines = async (req, res) => {
     res.status(400).json({
       success: false,
       message: "Error occured while retriving data",
-      date: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -42,14 +42,14 @@ export const createNewRoutine = async(req, res) => {
             success: true,
             message: "Routine Created Succesfully",
             data: rows[0],
-            date: new Date().toISOString()
+            timestamp: new Date().toISOString()
         })
     } catch (err) {
         console.error("Error while creating the routine", err);
         res.status(400).json({
             success: false,
             message: "Error While creating routine",
-            date: new Date().toISOString()
+            timestamp: new Date().toISOString()
         })
     }
 }
