@@ -20,3 +20,48 @@ export const getAllNames = async(req, res) => {
     }
     
 }
+
+
+export const createNames = async(req, res) => {
+    const {name} = req.body;
+
+    if(!name) {
+        return res.status(500).json({
+            success: false,
+            message: "Name is required",
+            timestamps: new Date().toISOString()
+        })
+    }
+
+
+
+    try {
+
+        // check for duplicate name
+
+        const checkingName = await pool.query('SELECT * FROM names WHERE name = $1', [name]);
+
+        if(checkingName.rows.length > 0) {
+            res.status(409).json({
+                success: false,
+                message: "Name already exists in db",
+                timestamps: new Date().toISOString()
+            })
+        }
+
+        const response = await pool.query('INSERT INTO names(name) VALUES ($1) RETURNING *', [name]);
+        res.status(201).json({
+            success: true,
+            message: "Name Created Sucesfully",
+            data: response.rows[0],
+            timestamps: new Date().toISOString()
+        })
+    } catch (error) {
+        console.error("Error creaitng names");
+        res.status(500).json({
+            success: false,
+            message: "Error occured while creating name",
+            timestamps: new Date().toISOString()
+        })
+    }
+}
