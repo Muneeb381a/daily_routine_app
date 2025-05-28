@@ -3,7 +3,7 @@ import { pool } from "../config/db.js";
 export const getAllNames = async(req, res) => {
 
     try {
-        const {rows} = await pool.query('SELECT * FROM names');
+        const {rows} = await pool.query('SELECT * FROM names ORDER BY name ASC');
     res.status(200).json({
         success: true,
         message: "All names fetched succefully",
