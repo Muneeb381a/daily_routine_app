@@ -3,11 +3,11 @@ import { pool } from "../config/db.js";
 export const getAllNames = async(req, res) => {
 
     try {
-        const result = await pool.query('SELECT * FROM names ORDER BY name ASC');
+        const {rows} = await pool.query('SELECT * FROM names');
     res.status(200).json({
         success: true,
         message: "All names fetched succefully",
-        data: result.rows[0],
+        data: rows,
         timestamps: new Date().toISOString()
     })
     } catch (error) {
