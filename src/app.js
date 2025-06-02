@@ -34,7 +34,7 @@ import todoRoutes from "./routes/todo.routes.js"
 app.use("/v1/api/routine", routine)
 app.use("/v1/api/all-routines", allRoutine)
 app.use("/v1/api/names", nameRoutes)
-app.use("/v1/api/todo", todoRoutes)
+app.use("/v1/api/todos", todoRoutes)
 
 
 export default app
