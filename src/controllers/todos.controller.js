@@ -77,3 +77,31 @@ export const updateTodos = async (req, res) => {
     });
   }
 };
+
+export const deleteTodos = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { rows } = await pool.query(
+      "DELETE FROM todos WHERE id = $1 RETURNING *",
+      [id]
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Todo not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Todos deleted succesfully",
+      data: rows[0],
+    });
+  } catch (error) {
+    console.error("Error while deleting the Todos");
+    res.status(500).json({
+      success: false,
+      message: "Unable to delete the todos",
+    });
+  }
+};
