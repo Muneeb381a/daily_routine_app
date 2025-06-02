@@ -29,10 +29,12 @@ app.get("/", (req, res) => {
 import routine from "./routes/daily_routine.routes.js";
 import allRoutine from "./routes/routine.routes.js";
 import nameRoutes from "./routes/names.routes.js"
+import todoRoutes from "./routes/todo.routes.js"
 
 app.use("/v1/api/routine", routine)
 app.use("/v1/api/all-routines", allRoutine)
 app.use("/v1/api/names", nameRoutes)
+app.use("/v1/api/todo", todoRoutes)
 
 
 export default app
