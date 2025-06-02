@@ -29,3 +29,51 @@ export const createTodo = async (req, res) => {
     });
   }
 };
+
+export const getTodo = async (req, res) => {
+  try {
+    const { rows } = await pool.query("SELECT * FROM todos ORDER BY id*");
+    res.status(200).json({
+      success: true,
+      message: "All Todos fetched succesfully",
+      data: rows,
+    });
+  } catch (error) {
+    console.error("Error while fething all the todos");
+    res.status(500).json({
+      success: false,
+      message: " Failed to fetch todos",
+    });
+  }
+};
+
+export const updateTodos = async (req, res) => {
+  const { id } = req.params;
+  const { completed } = req.body;
+
+  try {
+    const { rows } = await pool.query(
+      "UPDATE todos SET completed = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *",
+      [completed, id]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Todo not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Todo updated successfully",
+      data: rows[0],
+    });
+  } catch (error) {
+    console.error("Error while updating the todo:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update the todo",
+    });
+  }
+};
